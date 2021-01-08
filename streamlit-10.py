@@ -9,7 +9,7 @@ st.write("""
     """)
 st.write("for Tesla Stock")
 tsla = yf.Ticker("TSLA")
-data2=pd.DataFrame(tsla.history(period='max'))
+data2=pd.DataFrame(tsla.history(period="max"))
 df=pd.DataFrame(data2,columns =['Open','High', 'Low','Close'])
 
 df.index = pd.to_datetime(df.index)
@@ -17,6 +17,7 @@ df.index = pd.to_datetime(df.index)
 
 def TurtleHigh(values, n):    
     return pd.Series(values).rolling(n).max(skipna=True)
+
 def TurtleLow(values,n):    
     return pd.Series(values).rolling(n).min(skipna=True)
 
@@ -28,11 +29,9 @@ class Turtle(Strategy):
         self.High = self.I(TurtleHigh, self.data.High,self.n1)
         self.Low = self.I(TurtleLow,self.data.Low,self.n2)
         
-    def next(self):
-        
+    def next(self):        
         if (self.data.High[-1] > self.High[-2] and self.data.High[-2] < self.High[-3] and not self.position):
-            self.buy()
-            
+            self.buy()            
             
         elif (self.data.Low[-1] < self.Low[-2] and self.data.Low[-2] > self.Low[-3] and self.position):
             self.position.close()
@@ -40,13 +39,13 @@ class Turtle(Strategy):
             
 
 
-bt = Backtest(df,Turtle,cash=10000,commission=.0015, exclusive_orders=True)
+bt = Backtest(df,Turtle,cash=100000,commission=.0015, exclusive_orders=True)
 
 st.write(""" results of strategy
     """)
 stats = bt.run()
 st.write(stats)
-st.table(stats['_trades'])
+st.write(stats['_trades'])
 st.write(bt.plot())
 
 st.write(""" Optimization Results
@@ -58,5 +57,5 @@ stats = bt.optimize(n1=range(20,70,5),
 
 st.write(stats)
 st.write(stats._strategy)
-st.table(stats['_trades'])
+st.write(stats['_trades'])
 st.write(bt.plot())
