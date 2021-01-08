@@ -3,3 +3,5 @@ openpyxl==3.0.5
 pandas==1.1.1
 Backtesting==0.2.2
 streamlit==0.74.1
+tulipy==0.4.0
+finance==0.1.55
